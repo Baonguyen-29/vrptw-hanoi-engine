@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}VRPTW Hanoi Engine{% endblock %}</title>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="logo">🚚</div>
+            <div>
+                <h1>VRPTW HANOI ENGINE <span class="badge">v9.8</span></h1>
+                <p class="tagline">Tối ưu giao hàng chặng cuối Hà Nội · 400 đơn · 20 xe</p>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <span class="pill">⛽ 25.630 VND/L</span>
+            <a href="/api/export" class="pill pill-btn">📥 Export</a>
+            <span class="pill pill-active">● AI Active</span>
+        </div>
+    </header>
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="footer">
+        <p>© 2026 VRPTW Hanoi Engine · Ứng dụng AI tối ưu giao hàng chặng cuối nhằm giảm chi phí và phát thải</p>
+    </footer>
+</body>
+</html>

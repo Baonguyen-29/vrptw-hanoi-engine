@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>🗺️ Chi tiết tuyến đường</h2>
+{{ charts.route_map|safe }}
+<h2>📋 Tổng hợp tuyến theo xe</h2>
+<table class="data-table">
+<thead><tr><th>Xe</th><th>Số điểm</th><th>Tổng Km</th><th>Bắt đầu</th><th>Kết thúc</th></tr></thead>
+<tbody>
+{% for r in route_stats %}
+<tr>
+<td><b>{{ r.vehicle }}</b></td>
+<td>{{ r.num_stops }}</td>
+<td>{{ "%.2f"|format(r.distance_km) }}</td>
+<td>{{ r.start_time }}</td>
+<td>{{ r.end_time }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}

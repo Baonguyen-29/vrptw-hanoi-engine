@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+    <h2>📊 Dashboard VRPTW</h2>
+    <p>So sánh hiệu quả trước và sau khi áp dụng AI tối ưu giao hàng chặng cuối</p>
+</section>
+
+<section class="kpi-grid">
+    <div class="kpi-card">
+        <div class="kpi-label">Tổng quãng đường</div>
+        <div class="kpi-value">{{ kpi.after["Tổng quãng đường (km)"] }} <small>km</small></div>
+        <div class="kpi-sub">Giảm {{ "%.1f"|format(savings["Tổng quãng đường (km)"].diff) }} km ({{ "%.1f"|format(savings["Tổng quãng đường (km)"].pct) }}%)</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">Chi phí nhiên liệu</div>
+        <div class="kpi-value">{{ "{:,.0f}".format(kpi.after["Chi phí nhiên liệu (VND)"]) }} <small>VND</small></div>
+        <div class="kpi-sub">Tiết kiệm {{ "{:,.0f}".format(savings["Chi phí nhiên liệu (VND)"].diff) }} ({{ "%.1f"|format(savings["Chi phí nhiên liệu (VND)"].pct) }}%)</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">Phát thải CO₂</div>
+        <div class="kpi-value">{{ "%.2f"|format(kpi.after["Phát thải CO₂ (kg)"]) }} <small>kg</small></div>
+        <div class="kpi-sub">Giảm {{ "%.2f"|format(savings["Phát thải CO₂ (kg)"].diff) }} kg ({{ "%.1f"|format(savings["Phát thải CO₂ (kg)"].pct) }}%)</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">Xe sử dụng</div>
+        <div class="kpi-value">{{ kpi.after["Số phương tiện sử dụng"] }} <small>/ 20</small></div>
+        <div class="kpi-sub">Tiết kiệm {{ savings["Số phương tiện sử dụng"].diff }} xe</div>
+    </div>
+</section>
+
+<section class="chart-row">
+    <div class="chart-box">{{ charts.before_after|safe }}</div>
+    <div class="chart-box">{{ charts.savings_pie|safe }}</div>
+</section>
+
+<section class="chart-row">
+    <div class="chart-box">{{ charts.vehicle_eff|safe }}</div>
+    <div class="chart-box">{{ charts.cost_co2|safe }}</div>
+</section>
+
+<section class="chart-row">
+    <div class="chart-box">{{ charts.area_dist|safe }}</div>
+    <div class="chart-box">{{ charts.cost_breakdown|safe }}</div>
+</section>
+
+<section class="chart-box full">
+    <h2>🗺️ Bản đồ tuyến giao hàng</h2>
+    {{ charts.route_map|safe }}
+</section>
+
+<section class="chart-box full">
+    <h2>🕐 Timeline tuyến đường</h2>
+    {{ charts.route_timeline|safe }}
+</section>
+
+<section class="table-section">
+    <h2>📋 So sánh chi tiết</h2>
+    <table class="data-table">
+        <thead><tr><th>Chỉ tiêu</th><th>Trước AI</th><th>Sau AI</th><th>Giảm</th><th>%</th></tr></thead>
+        <tbody>
+            {% for k, s in savings.items() %}
+            <tr>
+                <td><b>{{ k }}</b></td>
+                <td>{{ "{:,.2f}".format(s.before) }}</td>
+                <td>{{ "{:,.2f}".format(s.after) }}</td>
+                <td class="positive">-{{ "{:,.2f}".format(s.diff) }}</td>
+                <td><span class="badge-green">-{{ "%.1f"|format(s.pct) }}%</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<section class="finance-section">
+    <h2>💰 Hiệu quả tài chính</h2>
+    <div class="finance-grid">
+        <div class="finance-card">
+            <div class="fin-label">Đầu tư ban đầu</div>
+            <div class="fin-value">{{ "{:,.0f}".format(financial.investment) }} VND</div>
+        </div>
+        <div class="finance-card">
+            <div class="fin-label">Tiết kiệm/năm</div>
+            <div class="fin-value">{{ "{:,.0f}".format(financial.savings_per_year) }} VND</div>
+        </div>
+        <div class="finance-card">
+            <div class="fin-label">Hoàn vốn</div>
+            <div class="fin-value">{{ financial.payback_months }} tháng</div>
+        </div>
+        <div class="finance-card">
+            <div class="fin-label">IRR</div>
+            <div class="fin-value">{{ financial.irr_pct }}%</div>
+        </div>
+    </div>
+    {{ charts.npv_sensitivity|safe }}
+</section>
+{% endblock %}

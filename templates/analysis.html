@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>📈 Phân tích chi phí & phát thải</h2>
+<div class="chart-row">
+<div class="chart-box">{{ charts.before_after|safe }}</div>
+<div class="chart-box">{{ charts.savings_pie|safe }}</div>
+</div>
+<div class="chart-row">
+<div class="chart-box">{{ charts.cost_breakdown|safe }}</div>
+<div class="chart-box">{{ charts.co2_by_type|safe }}</div>
+</div>
+<div class="chart-box full">{{ charts.npv_sensitivity|safe }}</div>
+{% endblock %}

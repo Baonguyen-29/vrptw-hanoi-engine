@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>⚙️ Mô phỏng VRPTW real-time</h2>
+<div class="simulator-panel">
+<div class="form-group">
+<label>α (trọng số chi phí) = <b id="alphaValue">0.50</b></label>
+<input type="range" id="alphaSlider" min="0" max="1" step="0.05" value="0.5">
+</div>
+<div class="form-group">
+<label>Số đơn hàng: <b id="ordersValue">50</b></label>
+<input type="range" id="ordersSlider" min="10" max="200" step="10" value="50">
+</div>
+<button id="runBtn" class="btn-primary">▶ Chạy VRPTW</button>
+<div id="status" class="status"></div>
+</div>
+<div id="resultPanel" class="result-panel hidden">
+<h2>📊 Kết quả</h2>
+<pre id="resultJson"></pre>
+</div>
+<script>
+document.getElementById("alphaSlider").oninput = e => document.getElementById("alphaValue").textContent = parseFloat(e.target.value).toFixed(2);
+document.getElementById("ordersSlider").oninput = e => document.getElementById("ordersValue").textContent = e.target.value;
+document.getElementById("runBtn").onclick = async () => {
+    const btn = document.getElementById("runBtn");
+    btn.disabled = true;
+    document.getElementById("status").textContent = "⏳ Đang chạy...";
+    try {
+        const r = await fetch("/api/simulate", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                alpha: parseFloat(document.getElementById("alphaSlider").value),
+                num_orders: parseInt(document.getElementById("ordersSlider").value),
+            })
+        });
+        const d = await r.json();
+        document.getElementById("resultPanel").classList.remove("hidden");
+        document.getElementById("resultJson").textContent = JSON.stringify(d, null, 2);
+        document.getElementById("status").textContent = "✅ Xong";
+    } catch(e) {
+        document.getElementById("status").textContent = "❌ " + e.message;
+    } finally {
+        btn.disabled = false;
+    }
+};
+</script>
+{% endblock %}

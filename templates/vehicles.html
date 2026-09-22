@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>🚛 Chi tiết phương tiện</h2>
+<div class="table-scroll tall">
+<table class="data-table">
+<thead><tr>
+<th>Xe</th><th>Loại</th><th>Tải</th><th>Sức chứa</th><th>%</th><th>Km</th>
+<th>Chi phí</th><th>L</th><th>CO₂</th><th>Đơn</th><th>Dùng</th>
+</tr></thead>
+<tbody>
+{% for v in vehicles %}
+<tr class="{{ 'row-active' if v.used == 'Có' else 'row-idle' }}">
+<td><b>{{ v.vehicle }}</b></td>
+<td>{{ v.type }}</td>
+<td>{{ v.load_kg }}</td>
+<td>{{ v.capacity_kg }}</td>
+<td>{{ v.utilization_pct }}%</td>
+<td>{{ "%.2f"|format(v.distance_km) }}</td>
+<td>{{ "{:,.0f}".format(v.cost_vnd) }}</td>
+<td>{{ "%.2f"|format(v.fuel_l) }}</td>
+<td>{{ "%.2f"|format(v.co2_kg) }}</td>
+<td>{{ v.num_orders }}</td>
+<td><span class="badge {{ 'badge-green' if v.used == 'Có' else 'badge-gray' }}">{{ v.used }}</span></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% endblock %}
